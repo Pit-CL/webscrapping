@@ -48,7 +48,7 @@ extractor = twitter_setup()
 
 # Se crea la lista de tweets:
 tweets = tweepy.Cursor(extractor.user_timeline,
-                       screen_name="DFinanciero").items(10)
+                       screen_name="sebastianpinera").items(101)
 
 # Se crea el df:
 df_tweets = pd.DataFrame(data=[tweet.text for tweet in tweets],
@@ -77,6 +77,14 @@ def clean_text(text):
 df_tweets['Tweets'] = df_tweets['Tweets']. \
     map(lambda x: clean_text(x))
 
+# Quedaron algunas palabras que hay que seguir limpiando.
+stop = ['@presidencia_cl', '[vivo]', 'rt', 'pdte', '2', '@sebastianpinera',
+        '@']
+
+df_tweets['Tweets'] = df_tweets['Tweets'].\
+    apply(lambda x: [item for item in x if item not in stop])
+
+
 # Lista de todas las palabras.
 palabras_todas = list(itertools.chain(*df_tweets['Tweets']))
 
@@ -84,7 +92,7 @@ palabras_todas = list(itertools.chain(*df_tweets['Tweets']))
 cuenta_palabras = collections.Counter(palabras_todas)
 
 # Se crea el df que contiene las palabras.
-df_palabras = pd.DataFrame(cuenta_palabras.most_common(5),
+df_palabras = pd.DataFrame(cuenta_palabras.most_common(100),
                            columns=['palabras', 'cantidad'])
 
 # Se grafica.
@@ -106,27 +114,23 @@ plt.show()
 extractor2 = twitter_setup()
 
 # Se listan los amigos:
-
 amigos = tweepy.Cursor(extractor2.friends,
-                       screen_name='DFinanciero').items(10)
+                       id='sebastianpinera').items(11)
 
 # Se crea el df_amigos.
-df_amigos = pd.DataFrame(data=[friends.name for friends in amigos],
+df_amigos = pd.DataFrame(data=[friends.id for friends in amigos],
                          columns=['amigos'])
 
-# TODO: Debo hacer un loop con la info como lo de abajo que sea capaz
-# TODO: de recorrer los 100 nombres y sacar los tweets.
-
+# Se crea la lista que nos permitirá iterar.
 lista_de_amigos = df_amigos['amigos'].tolist()
-# Se crea la lista de tweets:
-for tweets2 in lista_de_amigos:
-    tweets2 = tweepy.Cursor(extractor2.user_timeline,
-                            screen_name=amigos).items(10)
-    print(tweets2)
 
-# Se crea el df:
-df_tweets_amigos = pd.DataFrame(data=[tweet.text for tweet in tweets2],
-                                columns=['Tweets'])
+# Loop para encontrar los 10 tweets de los 10 usuarios seguidos.
+df_tweets_amigos = []
+for i in range(0, 10):
+    tweets = tweepy.Cursor(extractor2.user_timeline,
+                           id=lista_de_amigos[i]).items(11)
+    df_tweets_amigos = pd.DataFrame(data=[tweet.text for tweet in tweets],
+                                    columns=['Tweets'])
+    print(df_tweets_amigos)
 
-for amigos in lista_de_amigos:
-    print(amigos)
+# TODO: Hacer un append de cada resultado y crear un gran df.
