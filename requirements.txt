@@ -1,0 +1,9 @@
+tweepy~=3.10.0
+pandas~=1.2.2
+numpy~=1.19.2
+selenium~=3.141.0
+beautifulsoup4~=4.9.3
+matplotlib~=3.3.4
+seaborn~=0.11.1
+nltk~=3.5
+credentials~=1.1
