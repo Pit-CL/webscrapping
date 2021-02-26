@@ -2,22 +2,16 @@
 # Se importan las librerías necesarias
 ###############################################################################
 import collections
-
 import tweepy
-from credentials import *  # This will allow us to use the keys as variables
-import matplotlib.pyplot as plt
-import seaborn as sns
 import pandas as pd
 import string
-import re
 from nltk.corpus import stopwords
-from nltk import word_tokenize
 import nltk
 import itertools
-from collections import Counter
 import matplotlib.pyplot as plt
 
 nltk.download('stopwords')
+
 
 ###############################################################################
 # API
@@ -39,8 +33,10 @@ def twitter_setup():
     return api
 
 
-# Declaro variables que usaré más adelante.
-usuario_principal = 'sebastianpinera'
+# Declaro usuario que usaré más adelante.
+usuario_principal = 'DFinanciero'
+
+
 ###############################################################################
 # Extracción de tweets
 ###############################################################################
@@ -76,16 +72,18 @@ def clean_text(text):
 
 # Se recorre toda la columna Tweets aplicando la función clean_text
 df_tweets['Tweets'] = df_tweets['Tweets'].\
-    map(lambda x: clean_text(x))
+    map(lambda x:clean_text(x))
 
 # Quedaron algunas palabras que hay que seguir limpiando.
 stop = ['@presidencia_cl', '[vivo]', 'rt', 'pdte', '2', '@sebastianpinera',
         '@', '@presidencia_cl:', '@sebastianpinera,', '@gobiernodechile:',
         '-', 'of', 'q', '_', '+', 'e...', 'a...', 'de...', 's...', 'y.,.',
-        'tras', 'd...', '[en', 'vivo]', 'x']
+        'tras', 'd...', '[en', 'vivo]', 'x', '#lomásleído', '#dfmas',
+        '|', '🔑#dffull', '#dffull', '$', '4', '5', 'us$', 'df', '🧫covid-19',
+        'chile:', '24', 'si', 'tres', '2020']
 
 df_tweets['Tweets'] = df_tweets['Tweets'].\
-    map(lambda x: [item for item in x if item not in stop])
+    map(lambda x:[item for item in x if item not in stop])
 
 # Lista de todas las palabras.
 palabras_todas = list(itertools.chain(*df_tweets['Tweets']))
@@ -105,9 +103,9 @@ df_palabras.sort_values(by='cantidad').plot.barh(x='palabras',
                                                  y='cantidad',
                                                  ax=ax,
                                                  color="purple")
-
-ax.set_title("Palabras más comunes encontradas en los tweets de Piñera")
+ax.set_title("100 Palabras más comunes encontradas en los tweets de Piñera")
 plt.show()
+
 
 ###############################################################################
 # Extracción de seguidos por el Diario Financiero.
@@ -126,10 +124,9 @@ df_amigos = pd.DataFrame(data=[friends.id for friends in amigos],
 # Se crea la lista que nos permitirá iterar.
 lista_de_amigos = df_amigos['amigos'].tolist()
 
-# TODO REVISAR PORQUE SE CAE CON MÁS DE 10.
-# Loop para encontrar los 5 tweets de los 5 usuarios seguidos.
+# Loop para encontrar los 10 tweets de los 100 usuarios seguidos.
 df_final = pd.DataFrame()
-for i in range(0, 10):
+for i in range(0, 99):
     tweets = tweepy.Cursor(extractor2.user_timeline,
                            id=lista_de_amigos[i]).items(10)
 
@@ -155,10 +152,25 @@ stop = ['@presidencia_cl', '[vivo]', 'rt', 'pdte', '2', '@sebastianpinera',
         'https://t.co/cpbsvugtyk', 'https://t.co/fgb36ictit',
         'https://t.co/rz8jaxf5uw', 'https://t.co/eofq7xmsed',
         '#sigamosaprendiendo', 'https://t.co/26g2tizxwd', '1.8',
-        '2.092.453']
+        '2.092.453', 'hola,', '|', '@potus:', '5', 'd…', 'la...',
+        'la…', '@vtrsoporte', 'a…', 'l…', '🙌🏻', '2021', 's.a.;',
+        '#las3claves:', 'p…', '#fcab', '#dfmas', 'it’s', '@meconomia:',
+        '&amp;', '#covid19', 'us', '@sodimacayuda', 'dm.']
 
 df_final['Tweets'] = df_final['Tweets'].\
-    map(lambda x: [item for item in x if item not in stop])
+    map(lambda x:[item for item in x if item not in stop])
+
+
+# Limpieza de stopwords en inglés.
+def clean_text_english(text):
+    # Se eliminan los "stops words"
+    stops = set(stopwords.words("english"))
+    text = [w for w in text if not w in stops and len(w)]
+    return text
+
+
+df_final['Tweets'] = df_final['Tweets'].\
+    map(lambda x:clean_text_english(x))
 
 # Lista de todas las palabras.
 palabras_todas2 = list(itertools.chain(*df_final['Tweets']))
@@ -167,7 +179,7 @@ palabras_todas2 = list(itertools.chain(*df_final['Tweets']))
 cuenta_palabras2 = collections.Counter(palabras_todas2)
 
 # Se crea el df que contiene las palabras.
-df_palabras2 = pd.DataFrame(cuenta_palabras2.most_common(101),
+df_palabras2 = pd.DataFrame(cuenta_palabras2.most_common(100),
                             columns=['palabras', 'cantidad'])
 
 # Se grafica.
@@ -178,6 +190,5 @@ df_palabras2.sort_values(by='cantidad').plot.barh(x='palabras',
                                                   y='cantidad',
                                                   ax=ax2,
                                                   color="purple")
-
-ax.set_title("Palabras más comunes encontradas en los tweets de amigos")
+ax2.set_title("100 Palabras más comunes encontradas en los tweets de amigos")
 plt.show()
