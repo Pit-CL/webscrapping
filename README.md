@@ -1,11 +1,16 @@
 En grupos de máximo tres personas deberán resolver los dos problemas descritos abajo. Deben entregar el notebook con el código para resolver cada problema. Agregue comentarios al código para entender el razonamiento utilizado.
 
-Realice un proceso de web scraping para el sitio https://jetsmart.com/cl/es/. Para ello realice las siguientes tareas:
+Realice un proceso de web scraping para el sitio https://jetsmart.com/cl/es/. Para ello, realice las siguientes tareas:
+
 Utilizar Selenium para emular un navegador y cargar la página requerida (1 punto).
-Buscar vuelos desde Santiago a Arica del 1 de Abril al 30 de Abril utilizando los campos de inputs del buscador de la página (1 punto).
+
+Buscar vuelos desde Santiago a Arica del 1 de abril al 30 de abril utilizando los campos de inputs del buscador de la página (1 punto).
+
 Una vez en la página de resultados, extraiga la información de precios y fechas de vuelos de ida y de vuelta (1 punto).
+
 Repita el proceso para todos los días de febrero y genere un dataframe con la información de precios y fechas (1 punto).
 Crear una base de datos sqlite con la información del dataframe (1 punto).
+
 Realizar una consulta SQL para seleccionar los vuelos de ida y vuelta con el precio total mínimo (1 punto).
 
 
