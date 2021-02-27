@@ -88,24 +88,105 @@ click_buscar.click()
 
 precio_ida = []
 precio_vuelta = []
-fecha_ida = ['Jue 01-04']
+fecha_ida = []
 fecha_regreso = []
 
 elemento_1 = driver.find_elements_by_xpath("/html/body/app/div[1]/div[2]/div/section/div/flight/div/div/flight-select-form/div/form[1]/div[1]/section/flight-fee-selector[1]/div/div[1]/ul/li[4]/span[2]")
 for e in elemento_1:
     precio_ida.append(e.text)
 
-elemento_2 = driver.find_elements_by_xpath("/html/body/app/div[1]/div[2]/div/section/div/flight/div/div/flight-select-form/div/form[1]/div[1]/section/flight-fee-selector[2]/div/div[1]/ul/li[4]/span[2]")
-for a in elemento_2:
+elemento_2 = driver.find_elements_by_xpath("/html/body/app/div[1]/div[2]/div/section/div/flight/div/div/flight-itinerary/div/div[1]/div[4]")
+for c in elemento_2:
+    fecha_regreso.append(c.text)
+
+
+elemento_3 = driver.find_elements_by_xpath("/html/body/app/div[1]/div[2]/div/section/div/flight/div/div/flight-select-form/div/form[1]/div[1]/section/flight-fee-selector[2]/div/div[1]/ul/li[4]/span[2]")
+for a in elemento_3:
     precio_vuelta.append(a.text)
 
-# extraigo elementos de resultados de consulta e imprimo
-elems = driver.find_elements_by_class_name("week-selector.open")
-for e in elems:
-    try:
-        print(e.find_element_by_tag_name('span').text)
-        print()
-    except:
-        print("No encontré elementos")
-        print()
+elemento_4 = driver.find_elements_by_xpath("/html/body/app/div[1]/div[2]/div/section/div/flight/div/div/flight-itinerary/div/div[1]/div[2]")
+for d in elemento_4:
+    fecha_ida.append(d.text)
 
+# Loops que me permite obtener todos los datos de partida.
+for elem in driver.find_elements_by_xpath("/html/body/app/div[1]/div[2]/div/section/div/flight/div/div/flight-select-form/div/form[1]/div[1]/section/flight-fee-selector[1]/div/div[1]"):
+    print(elem.text)
+
+# Ahora le doy click a siguiente.
+sleep(3)
+click_siguiente = driver.find_element_by_xpath(
+    "/html/body/app/div[1]/div[2]/div/section/div/flight/div/div/flight-select-form/div/form[1]/div[1]/section/flight-fee-selector[1]/div/div[1]/div[2]/i")
+click_siguiente.click()
+
+# Loop que me permite obtener todos los datos de llegada.
+for elem2 in driver.find_elements_by_xpath("/html/body/app/div[1]/div[2]/div/section/div/flight/div/div/flight-select-form/div/form[1]/div[1]/section/flight-fee-selector[2]/div/div[1]"):
+    print(elem2.text)
+
+
+
+# TODO: ver como puedo trabajar con el texto para pasarlo a df.
+
+
+
+
+
+
+
+# extraigo elementos de resultados de consulta e imprimo
+# elems = driver.find_elements_by_class_name("week-selector.open")
+# for e in elems:
+#     try:
+#         print(e.find_element_by_tag_name('span').text)
+#         print()
+#     except:
+#         print("No encontré elementos")
+#         print()
+
+
+# https://stackoverflow.com/questions/37732649/scrapy-loop-xpath-selector-escaping-object-it-is-applied-to-and-returning-all
+# def parse(self, response):
+#     hxs = Selector(response)
+#     split_url = response.url.split("/")
+#     listings = hxs.xpath("//div[contains(@class,'listing-item')]")
+#     for vehicle in listings:
+#         item = Vehicle()
+#         item['make'] = split_url[5]
+#         item['price'] = vehicle.xpath(".//div[contains(@class,'price')]/text()").extract()
+#         item['description'] = vehicle.xpath(".//div[contains(@class,'title-module')]/h2/a/text()").extract()
+#         yield item
+
+# https://medium.com/analytics-vidhya/what-if-selenium-could-do-a-better-job-than-your-travel-agency-5e4e74de08b0
+
+from selenium.webdriver.support.ui import Select
+
+# From Date
+# date_picker_from_xpath = '//*[contains(@id, "dateRangeInput-display-start-inner")]'
+# from_date_click_xpath = '//div[contains(@id, "depart")]'
+# from_date_text_xpath = '//div[contains(@id, "depart-input")]'
+# from_flexible_xpath = '//select[contains(@id, "datePicker-plusMinusThreeDepart-select")]'
+# departure_date = '05/08/2021'
+# driver.find_element_by_xpath(date_picker_from_xpath).click()
+# sleep(1)
+# driver.find_element_by_xpath(from_date_click_xpath).click()
+# driver.find_element_by_xpath(from_date_text_xpath).clear()
+# driver.find_element_by_xpath(from_date_text_xpath).send_keys(departure_date)
+#
+# # Add flexible date option +/- 3days
+# Select(driver.find_element_by_xpath(from_flexible_xpath)).select_by_value('plusminusthree')
+# sleep(1)
+#
+# # To Date
+# to_date_text_xpath = '//div[contains(@id, "return-input")]'
+# to_flexible_xpath = '//select[contains(@id, "datePicker-plusMinusThreeReturn-select")]'
+# returning_date = '13/08/2021'
+# driver.find_element_by_xpath(to_date_text_xpath).clear()
+# sleep(1)
+# driver.find_element_by_xpath(to_date_text_xpath).send_keys(returning_date)
+# sleep(1)
+#
+# # Add flexible date option +/- 3days
+# Select(driver.find_element_by_xpath(to_flexible_xpath)).select_by_value('plusminusthree')
+#
+# # Click the submit button to launch the search
+# submit_button_xpath = '//button[contains(@id, "submit")]'
+# driver.find_element_by_xpath(submit_button_xpath).click()
