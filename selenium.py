@@ -3,7 +3,7 @@
 ###############################################################################
 
 
-from selenium_rafael_farias import webdriver
+from selenium import webdriver
 from time import sleep, strftime
 import re
 import pandas as pd
