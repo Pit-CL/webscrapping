@@ -16,10 +16,10 @@ nltk.download('stopwords')
 ###############################################################################
 # API
 ###############################################################################
-consumer_key = 'V2NQxXmZPCAQVtsECjLedJDY4'
-consumer_secret = 'KjyjaFdCUlxDy2Oj0o7aqihIxvERHFrW4Hy9122eJJC2pZ6TFz'
-access_token = '1322018135537520640-JXb5lZMnFb8DH2Evp6CA2vTcrHw9u8'
-access_token_secret = 'TSoqCk7qbAIGJgCD8jJTCrnXNuTAgob2q8LxBFmygq17g'
+consumer_key = 'xxxxxx'
+consumer_secret = 'xxxxxx'
+access_token = 'xxxxxxx'
+access_token_secret = 'xxxxxxxx'
 
 
 # Seteando la API:
